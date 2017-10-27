@@ -78,9 +78,9 @@
                 song.playing = false;
             };
 
-        /**
-        * @func go to previous song, set song index
-        */
+            /**
+            * @func go to previous song, set song index
+            */
             SongPlayer.previous = function () {
                 var currentSongIndex = getSongIndex(SongPlayer.currentSong);
                 currentSongIndex--;
@@ -94,9 +94,6 @@
                     playSong(song);
                 }
             };
-
-
-
         return SongPlayer;
     };
 
