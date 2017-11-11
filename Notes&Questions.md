@@ -1,7 +1,7 @@
 |   | Problem Occuring When...? | Fix...? | 
 | --- | --- | --- |
 |@cp7 | 1)Play->correct action & switch to pause buttom 2)Pause-> correct action & switch to play button 3)Play (same number) -> Doesn't pause song, Doesnt show pause button |   |
-| 
+| @cp9 | main seek bar doesnt move onClick - volume seek works onClick |
 
 
 
