@@ -1,4 +1,3 @@
-
 (function () {
   function seekBar($document) {
     var calculatePercent = function (seekBar, event) {      var offsetX = event.pageX - seekBar.offset().left;      var seekBarWidth = seekBar.width();      var offsetXPercent = offsetX / seekBarWidth;      offsetXPercent = Math.max(0, offsetXPercent);      offsetXPercent = Math.min(1, offsetXPercent);      return offsetXPercent;    };
@@ -10,7 +9,7 @@
         onChange: '&'
       },
       link: function (scope, element, attributes) {
-        //directive logic to return                     scope.value = 0;        scope.max = 100;        var seekBar = $(element);
+        //directive logic to return        scope.value = 0;        scope.max = 100;        var seekBar = $(element);
         //use $observe to monitor the value changes of these attributes in a manner specific to this directive
         attributes.$observe('value', function (newValue) {
           scope.value = newValue;
