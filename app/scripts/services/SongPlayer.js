@@ -4,7 +4,7 @@
   * @description allows controlling the songs & audio files from Fixtures through Player Bar
   * @param {Object} Fixtures
   */
-  function SongPlayer(Fixtures) {
+  function SongPlayer($rootScope, Fixtures) {
     var SongPlayer = {};
     /**
     * @desc sets active album
@@ -13,7 +13,7 @@
 
     /**
     * @desc Buzz object audio file
-    * @type {Object}
+    * @type {Object} file url
     */
     var currentBuzzObject = null;
 
@@ -28,6 +28,11 @@
         formats: ['mp3'],
         preload: true
       })
+      currentBuzzObject.bind('timeupdate', function () {
+        $rootScope.$apply(function () {
+          SongPlayer.currentTime = currentBuzzObject.getTime();
+        });
+      });
 
       SongPlayer.currentSong = song;
     };
@@ -43,15 +48,16 @@
     };
 
     /**
-    * @desc creates public attr SongPlayer.currentSong  set active song from list of songs
-    * @type {Object}
-
-    */
-    /**
     * @desc clears current song
+    * @type {number}
     */
     SongPlayer.currentSong = null;
 
+    /**
+    * @desc Current playback time (in seconds) of currently playing song
+    * @type {Number}
+    */
+    SongPlayer.currentTime = null;
 
     var playSong = function (song) {
       currentBuzzObject.play();
@@ -123,10 +129,20 @@
         playSong(song);
       }
     };
+    /**
+    * @function setCurrentTime
+    * @desc Set current time (in seconds) of currently playing song
+    * @param {Number} time
+    */
+    SongPlayer.setCurrentTime = function (time) {
+      if (currentBuzzObject) {
+        currentBuzzObject.setTime(time);
+      }
+    };
     return SongPlayer;
   };
 
   angular
     .module('blocJams')
-    .factory('SongPlayer', ['Fixtures', SongPlayer])
+    .factory('SongPlayer', ['$rootScope', 'Fixtures', SongPlayer])
 })();

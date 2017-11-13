@@ -6,9 +6,24 @@
       templateUrl: '/templates/directives/seek_bar.html',
       replace: true,
       restrict: 'E',
-      scope: {},
+      scope: {
+        onChange: '&'
+      },
       link: function (scope, element, attributes) {
-        //directive logic to return                     scope.value = 0;        scope.max = 100;        var seekBar = $(element);        var percentString = function () {          var value = scope.value;          var max = scope.max;          var percent = value / max * 100;          return percent + "%";        };        scope.fillStyle = function () {          return { width: percentString() };        };        /**        * @desc allows seekbar.thumb  to move at correct position == onClick        */        scope.thumbStyle = function () {          return { left: percentString() };        };        scope.onClickSeekBar = function (event) {          var percent = calculatePercent(seekBar, event);          scope.value = percent * scope.max;        };        scope.trackThumb = function () {          $document.bind('mousemove.thumb', function (event) {            var percent = calculatePercent(seekBar, event);            //$scope.$apply is required to ensure that the functionality of the events are captured from the seekbar(s) while the scripts run and are loading - when it is removed, the click event is not continuously registered allowing dragging, rather it only allows for single mousedown/mouseup event to change the position of the seek bar/thumb//            scope.$apply(function () {              scope.value = percent * scope.max;            });          });          $document.bind('mouseup.thumb', function () {            $document.unbind('mousemove.thumb');            $document.unbind('mouseup.thumb');          });        };
+        //directive logic to return                     scope.value = 0;        scope.max = 100;        var seekBar = $(element);
+        //use $observe to monitor the value changes of these attributes in a manner specific to this directive
+        attributes.$observe('value', function (newValue) {
+          scope.value = newValue;
+        });
+
+        attributes.$observe('max', function (newValue) {
+          scope.max = newValue;
+        });        var percentString = function () {          var value = scope.value;          var max = scope.max;          var percent = value / max * 100;          return percent + "%";        };        scope.fillStyle = function () {          return { width: percentString() };        };        /**        * @desc allows seekbar.thumb  to move at correct position == onClick        */        scope.thumbStyle = function () {          return { left: percentString() };        };        scope.onClickSeekBar = function (event) {          var percent = calculatePercent(seekBar, event);          scope.value = percent * scope.max;          notifyOnChange(scope.value);        };        scope.trackThumb = function () {          $document.bind('mousemove.thumb', function (event) {            var percent = calculatePercent(seekBar, event);            scope.$apply(function () {              scope.value = percent * scope.max;              notifyOnChange(scope.value);
+            });          });          $document.bind('mouseup.thumb', function () {            $document.unbind('mousemove.thumb');            $document.unbind('mouseup.thumb');          });        };        var notifyOnChange = function (newValue) {
+          if (typeof scope.onChange === 'function') {
+            scope.onChange({ value: newValue });
+          }
+        };
       }
     };
   }
