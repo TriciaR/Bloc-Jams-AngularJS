@@ -17,7 +17,6 @@
     */
     var currentBuzzObject = null;
 
-
     /**    * @function setSong    * @desc Stops currently playing song and loads new audio file as currentBuzzObject    * @param {Object} song    */
     var setSong = function (song) {
       if (currentBuzzObject) {
@@ -58,6 +57,11 @@
     * @type {Number}
     */
     SongPlayer.currentTime = null;
+    /**
+    * @desc creates a volume value
+    * @type {Number}
+    */
+    SongPlayer.volume = null;
 
     var playSong = function (song) {
       currentBuzzObject.play();
@@ -72,16 +76,12 @@
       SongPlayer.currentSong.playing = null;
     };
 
-
     /**    * @function SongPlayer.play    * @desc plays currently selected song and loads selected audio file as currentBuzzObject if not currentSong    * @param {Object} song    */
     SongPlayer.play = function (song) {
-
-
       song = song || SongPlayer.currentSong;
       if (SongPlayer.currentSong !== song) {
         setSong(song);
         playSong(song);
-
       } else if (SongPlayer.currentSong === song) {
         if (currentBuzzObject.isPaused()) {
           playSong(song);
@@ -122,7 +122,6 @@
       currentSongIndex++;
       if (currentSongIndex >= currentAlbum.songs.length) {
         stopSong();
-
       } else {
         var song = currentAlbum.songs[currentSongIndex];
         setSong(song);
@@ -139,6 +138,13 @@
         currentBuzzObject.setTime(time);
       }
     };
+
+    SongPlayer.setVolume = function (volume) {
+      if (currentBuzzObject) {
+        currentBuzzObject.setVolume(volume);
+      }
+    };
+
     return SongPlayer;
   };
 
